@@ -1,6 +1,42 @@
 # Rspec::Also
 
-TODO: Write a gem description
+RSpec::Also is a crazy hack so you can write tests in tree form:
+
+``` ruby
+it "posts" do
+  click_link "Posts"
+
+  also "looking at a post" do
+    click_link "My first post"
+
+    also "deleting it removes it from the list" do
+      click_button "Delete"
+      page.should_not have_content "My first post"
+    end
+
+    also "editing changes the title" do
+      click_link "Edit"
+      fill_in "Title", with: "My awesome post"
+      click_button "Save"
+      page.should have_content "My awesome post"
+    end
+  end
+
+  also "deleting it directly removes it from the list" do
+    find("li", text: "My first post").click_button "Delete"
+    page.should_not have_content "My first post"
+  end
+end
+```
+
+The above code will run through all scenarios. This means you can write your
+tests in a nicely branching structure, always resuming from where you
+previously were. Only what actually happens is that the above example is run
+three times in succession, each time choosing a different branch.
+
+## Limitations
+
+
 
 ## Installation
 
@@ -18,7 +54,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+It doesn't work yet, don't use it!
 
 ## Contributing
 
